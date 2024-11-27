@@ -1,0 +1,51 @@
+static
+		{
+			System.setProperty("webdriver.chrome.driver","./driver/chromedriver.exe");
+		}
+		public static void main(String[] args) throws Exception {
+		WebDriver driver=new ChromeDriver();
+		driver.get("https://fitpeo.com/");
+	     driver.manage().window().maximize();
+	     driver.findElement(By.xpath("//div[text()='Revenue Calculator']")).click();
+	     Thread.sleep(5000);
+	     WebElement Element = driver.findElement(By.xpath("//h4[text()='Medicare Eligible Patients']"));
+	     JavascriptExecutor js = (JavascriptExecutor)driver;
+	     js.executeScript("window.scrollBy(0,300)");   
+	     // Adjust the Slider to 820
+	     WebElement slider = driver.findElement(By.xpath("//span[@class='MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary MuiSlider-thumb MuiSlider-thumbSizeMedium MuiSlider-thumbColorPrimary css-sy3s50']"));
+	     ((JavascriptExecutor) driver).executeScript("arguments[0].value = 820;", slider);         
+	     Actions s=new Actions(driver);
+	     s.dragAndDropBy(slider,94,0).perform();
+	     // Validate the text field value
+	     WebElement  textField= driver.findElement(By.xpath("//input[@class='MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputSizeSmall css-1o6z5ng']"));
+	     if (!textField.getAttribute("value").equals("823")) 
+	     {   	 
+	         throw new Exception("Slider value did not update to 823");
+   }     
+	     // Update the Text Field to 560
+	     textField.clear();
+	     Thread.sleep(3000);
+	     textField.sendKeys("560");
+	     // Validate the slider position
+	     if (!slider.getAttribute("value").equals("560")) {
+	    	// System.out.println("Text field value did not update the slider to 560");
+	        // throw new Exception("Text field value did not update the slider to 560");
+	     }
+	     
+	     // Scroll down further to select CPT Codes
+	     js.executeScript("window.scrollBy(0,600)"); 
+	     driver.findElement(By.xpath("(//input[@type='checkbox'])[1]")).click();
+	     driver.findElement(By.xpath("(//input[@type='checkbox'])[2]")).click();
+	    driver.findElement(By.xpath("(//input[@type='checkbox'])[3]")).click();
+	     driver.findElement(By.xpath("(//input[@type='checkbox'])[4]")).click();
+	     
+	    WebElement recurring = driver.findElement(By.xpath("(//p[@class='MuiTypography-root MuiTypography-body1 inter css-hocx5c'])[4]"));
+	   String text1 = recurring.getText();
+	   System.out.println("Total Recurring Reimbursement for all Patients Per Month:"+ text1);
+	    
+    
+	    driver.close();
+	    
+	     
+		}
+	}
