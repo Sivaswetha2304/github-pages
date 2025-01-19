@@ -1,0 +1,14 @@
+import requests
+
+url = "https://ipl-api1.p.rapidapi.com/match"
+
+querystring = {"team":"Kolkata Knight Riders"}
+
+headers = {
+	"x-rapidapi-key": "becd68e3acmsh00fad51832a52b9p12d626jsn4e91ddd4bdad",
+	"x-rapidapi-host": "ipl-api1.p.rapidapi.com"
+}
+
+response = requests.get(url, headers=headers, params=querystring)
+
+print(response.json())
